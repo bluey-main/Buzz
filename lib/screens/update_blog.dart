@@ -53,7 +53,7 @@ class _UpdateBlogState extends State<UpdateBlog> {
               blogs.updateBlog(
                 widget.blog.id!,
                 _titleTextEditingController.text.trim(),
-                '@victor_dev1',
+                blogs.profileName!,
                 _bodyTextEditingController.text.trim(),
                 widget.blog.dateCreated!,
               );

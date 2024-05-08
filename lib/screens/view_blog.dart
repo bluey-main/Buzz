@@ -21,7 +21,11 @@ class ViewBlog extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(),
+                  CircleAvatar(
+                      child:Text(blog.subtitle!.isNotEmpty
+                      ? blog.subtitle!.characters.elementAt(1).toUpperCase()
+                      : "") ,
+                    ),
                     const SizedBox(
                       width: 20,
                     ),

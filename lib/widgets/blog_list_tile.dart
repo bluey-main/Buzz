@@ -26,12 +26,12 @@ class BlogListTile extends StatelessWidget {
             ));
       },
       child: Slidable(
-        key: const ValueKey(0),
+        // key: const ValueKey(0),
         endActionPane: ActionPane(
           motion: const ScrollMotion(),
-          dismissible: DismissiblePane(onDismissed: () {
-            blogs.deleteBlog(blog.id);
-          }),
+          // dismissible: DismissiblePane(onDismissed: () {
+          //   blogs.deleteBlog(blog.id);
+          // }),
           children: [
             SlidableAction(
               onPressed: (context) {
@@ -76,8 +76,8 @@ class BlogListTile extends StatelessWidget {
                 width: MediaQuery.sizeOf(context).width / 5,
                 height: 40.0,
                 child: CircleAvatar(
-                  child: Text(blog.title!.isNotEmpty
-                      ? blog.title!.characters.first.toUpperCase()
+                  child: Text(blog.subtitle!.isNotEmpty
+                      ? blog.subtitle!.characters.elementAt(1).toUpperCase()
                       : ""),
                 ),
               ),
@@ -101,16 +101,14 @@ class BlogListTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 20,),
-                          Expanded(
-                            child: Text(
-                              blog.subtitle!,
+                          
+                          Text(
+                            blog.subtitle!,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Color(0xFFAD88C6),
-                                fontSize: 14.0,
-                              ),
+                              color: Color(0xFFAD88C6),
+                              fontSize: 14.0,
                             ),
                           ),
                          

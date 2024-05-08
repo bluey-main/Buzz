@@ -47,7 +47,7 @@ class CreateBlog extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 return;
               }
-              blogs.createBlog(uuid.v4(), _titleTextEditingController.text.trim(), '@victor_dev1', _bodyTextEditingController.text.trim());
+              blogs.createBlog(uuid.v4(), _titleTextEditingController.text.trim(), blogs.profileName! , _bodyTextEditingController.text.trim());
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
