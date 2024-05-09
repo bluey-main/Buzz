@@ -38,30 +38,28 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            maxRadius: 5.0,
-            child: Text( profileName.toString().characters.elementAt(1).toUpperCase()),
-          ),
-        ),
-        title: const Text(
-          'Buzzz',
-          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
+          child: GestureDetector(
+            onTap: (){
+          Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddProfileName(),
                 ),
               );
             },
+            child: CircleAvatar(
+              maxRadius: 5.0,
+              child: Text( profileName.toString().characters.elementAt(1).toUpperCase()),
+            ),
           ),
-        ],
+        ),
+        title: const Text(
+          'Buzzz',
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+        ),
+       
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: profileName == null ? const Text(""): FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
