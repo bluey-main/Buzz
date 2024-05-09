@@ -1,6 +1,7 @@
 import 'package:first/models/blog_model.dart';
 import 'package:first/provider/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class UpdateBlog extends StatefulWidget {
@@ -14,6 +15,8 @@ class UpdateBlog extends StatefulWidget {
 class _UpdateBlogState extends State<UpdateBlog> {
   late TextEditingController _titleTextEditingController;
   late TextEditingController _bodyTextEditingController;
+  final  _box = Hive.box("profile");
+
 
   @override
   void initState() {
@@ -32,6 +35,7 @@ class _UpdateBlogState extends State<UpdateBlog> {
   @override
   Widget build(BuildContext context) {
     final blogs = Provider.of<DataProvider>(context);
+     String? profileName = _box.get("profileName");
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +57,7 @@ class _UpdateBlogState extends State<UpdateBlog> {
               blogs.updateBlog(
                 widget.blog.id!,
                 _titleTextEditingController.text.trim(),
-                blogs.profileName!,
+               profileName ?? "",
                 _bodyTextEditingController.text.trim(),
                 widget.blog.dateCreated!,
               );
@@ -75,7 +79,7 @@ class _UpdateBlogState extends State<UpdateBlog> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(radius: 25.0),
+             CircleAvatar(radius: 25.00, child: Text(profileName.toString().characters.elementAt(1).toUpperCase())),
             const SizedBox(width: 20),
             Expanded(
               child: Column(

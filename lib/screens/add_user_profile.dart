@@ -1,5 +1,6 @@
 import 'package:first/provider/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class AddProfileName extends StatefulWidget {
@@ -12,20 +13,31 @@ class AddProfileName extends StatefulWidget {
 class _AddProfileNameState extends State<AddProfileName> {
   final TextEditingController _profileNameTextEditingController =
       TextEditingController();
+  final  _box = Hive.box("profile");
+ 
 
   @override
   void initState() {
     super.initState();
-    // Call getProfileName when the widget is initialized
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DataProvider>(context, listen: false).getProfileName();
-    });
+    // Call getProfileName when the widget is initialize
+  }
+
+  void setProfileName() {
+    if (_profileNameTextEditingController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter a name")),
+      );
+      return;
+    }
+    _box.put(
+        "profileName", "@${_profileNameTextEditingController.text.trim()}");
+
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final profileData = Provider.of<DataProvider>(context);
-
+     String? profileName = _box.get("profileName");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Profile Name"),
@@ -37,14 +49,15 @@ class _AddProfileNameState extends State<AddProfileName> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Display profile name if available
-              if (profileData.profileName != null)
-                Text(
-                  profileData.profileName!,
-                  style: const TextStyle(
-                      fontSize: 26.0, fontWeight: FontWeight.bold),
-                ),
+              Text(
+                profileName ?? "",
+                style: const TextStyle(
+                    fontSize: 26.0, fontWeight: FontWeight.bold),
+              ),
 
-                const SizedBox(height: 20.0,),
+              const SizedBox(
+                height: 20.0,
+              ),
               TextFormField(
                 controller: _profileNameTextEditingController,
                 decoration: const InputDecoration(
@@ -54,17 +67,7 @@ class _AddProfileNameState extends State<AddProfileName> {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  if (_profileNameTextEditingController.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please enter a name")),
-                    );
-                    return;
-                  }
-                  profileData.addProfileName(
-                      "@${_profileNameTextEditingController.text.trim()}",
-                      context);
-                },
+                onPressed: setProfileName,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFAD88C6),
                 ),

@@ -8,39 +8,16 @@ class DataProvider extends ChangeNotifier {
   List<BlogModel>? _blogs;
   final GraphqlService _graphqlService = GraphqlService();
   bool _isLoading = false;
-  final _myBox = Hive.box("profile");
-  String? _profileName;
+
   
   
 
   List<BlogModel>? get blogs => _blogs;
   GraphqlService get graphqlService => _graphqlService;
   bool get isLoading => _isLoading;
-  String? get profileName => _profileName;
 
-  void getProfileName() {
-    _profileName = _myBox.get('profileName');
-    if (_profileName == null) {
-      _myBox.put('profileName', '');
-    }
-    print(_profileName);
-    notifyListeners();
-  }
 
-  void addProfileName(String newProfileName, BuildContext context) {
-    _myBox.put('profileName', newProfileName);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Home()),
-    );
-    notifyListeners();
-  }
 
-  void deleteProfileName() {
-    _myBox.put("profileName", '');
-
-    notifyListeners();
-  }
 
   void load() async {
     _blogs = null;

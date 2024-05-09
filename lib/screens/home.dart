@@ -5,6 +5,7 @@ import 'package:first/widgets/blog_list_tile.dart';
 import 'package:first/widgets/bottom_to_top_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,18 +15,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _box = Hive.box("profile");
 
-   @override
+  @override
   void initState() {
     super.initState();
-    // Call getProfileName when the widget is initialized
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DataProvider>(context, listen: false).getProfileName();
-    });
   }
+
   @override
   Widget build(BuildContext context) {
     final blogs = Provider.of<DataProvider>(context);
+     String? profileName = _box.get("profileName");
+
 
     // Listen to changes in the provider's state
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,9 +40,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.all(8.0),
           child: CircleAvatar(
             maxRadius: 5.0,
-            child:Text(blogs.profileName!.isNotEmpty
-                      ? blogs.profileName!.characters.elementAt(1).toUpperCase()
-                      : "") ,
+            child: Text( profileName.toString().characters.elementAt(1).toUpperCase()),
           ),
         ),
         title: const Text(
@@ -52,15 +51,12 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              blogs.getProfileName();
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddProfileName(),
                 ),
               );
-
-              
             },
           ),
         ],
@@ -74,32 +70,52 @@ class _HomeState extends State<Home> {
         },
         child: const Icon(Icons.add),
       ),
-      body: blogs.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
+      body: profileName == null
+          ? Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddProfileName(),
+                      ));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFAD88C6),
+                ),
+                child: const Text(
+                  "ADD A USERNAME",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             )
-          : SafeArea(
-              child: blogs.blogs == null
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : blogs.blogs!.isEmpty
+          : blogs.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SafeArea(
+                  child: blogs.blogs == null
                       ? const Center(
-                          child: Text("No Blogs"),
+                          child: CircularProgressIndicator(),
                         )
-                      : ListView.builder(
-                          itemCount: blogs.blogs!.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                BlogListTile(
-                                    blog: blogs.blogs![index], index: index),
-                                const Divider()
-                              ],
-                            );
-                          },
-                        ),
-            ),
+                      : blogs.blogs!.isEmpty
+                          ? const Center(
+                              child: Text("No Blogs"),
+                            )
+                          : ListView.builder(
+                              itemCount: blogs.blogs!.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    BlogListTile(
+                                        blog: blogs.blogs![index],
+                                        index: index),
+                                    const Divider()
+                                  ],
+                                );
+                              },
+                            ),
+                ),
     );
   }
 }

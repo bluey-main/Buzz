@@ -1,5 +1,6 @@
 import 'package:first/provider/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,12 +12,15 @@ class CreateBlog extends StatelessWidget {
 
   final TextEditingController _bodyTextEditingController =
       TextEditingController();
+  final  _box = Hive.box("profile");
+
 
   static const uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
     final blogs = Provider.of<DataProvider>(context);
+     String? profileName = _box.get("profileName");
 
     
     return Scaffold(
@@ -47,7 +51,7 @@ class CreateBlog extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 return;
               }
-              blogs.createBlog(uuid.v4(), _titleTextEditingController.text.trim(), blogs.profileName! , _bodyTextEditingController.text.trim());
+              blogs.createBlog(uuid.v4(), _titleTextEditingController.text.trim(), profileName ?? "" , _bodyTextEditingController.text.trim());
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
@@ -68,7 +72,7 @@ class CreateBlog extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(radius: 25.0),
+            CircleAvatar(radius: 25.0, child: Text(profileName.toString().characters.elementAt(1).toUpperCase())),
             const SizedBox(width: 20),
             Expanded(
               child: Column(
