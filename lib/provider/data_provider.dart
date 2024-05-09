@@ -1,8 +1,6 @@
 import 'package:first/models/blog_model.dart';
 import 'package:first/graphql/graphql_service.dart';
-import 'package:first/screens/home.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class DataProvider extends ChangeNotifier {
   List<BlogModel>? _blogs;

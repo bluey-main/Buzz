@@ -1,7 +1,5 @@
-import 'package:first/provider/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 
 class AddProfileName extends StatefulWidget {
   AddProfileName({Key? key}) : super(key: key);

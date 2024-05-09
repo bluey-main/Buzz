@@ -1,6 +1,5 @@
 import 'package:first/provider/data_provider.dart';
 import 'package:first/screens/home.dart';
-import 'package:first/widgets/profile_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
